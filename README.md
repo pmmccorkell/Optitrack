@@ -7,6 +7,7 @@ Done:
 - Joined to network
 
 Todo:
+- Create new admin accounts
 - Test Unicast after joined
 - Data to device
     - VRPN <> ROS, Odroid ?
