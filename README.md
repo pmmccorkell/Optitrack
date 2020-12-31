@@ -3,7 +3,7 @@ Development of 208 lab
 
 Done:
 - Backup HD
-- Unicast working before policies implemented
+- Unicast working before joined
 - Joined to network
 
 Todo:
