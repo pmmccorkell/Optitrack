@@ -9,9 +9,9 @@ Done:
 Todo:
 - Test Unicast after joined
 - Data to device
-    VRPN <> ROS, Odroid ?
-    RasPi PyPi lib
-        Update Motive??
+    - VRPN <> ROS, Odroid ?
+    - RasPi PyPi lib
+        - Update Motive??
 - RasPi wired
 - RasPi wireless
 - RasPi headless
