@@ -5,6 +5,7 @@ Done:
 - Backup HD
 - Unicast working before joined
 - Joined to network
+- Migrate data out of Documents
 
 Todo:
 - Create new admin accounts
