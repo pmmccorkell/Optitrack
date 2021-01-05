@@ -14,28 +14,28 @@ pip install paho-mqtt
 Make sure it's the active install directory.
 
 3. Add 'callback.py' to the same folder as 'OptiTrack.m'
-    This file shall be editable by [student,faculty,whoever] and will ideally be customized for application.
-    Presently just prints out the result of subscription.
-    As the filename implies, MQTT subscriptions are interrupt driven to a callback function.
+    - This file shall be editable by [student,faculty,whoever] and will ideally be customized for application.
+    - Presently just prints out the result of subscription.
+    - As the filename implies, MQTT subscriptions are interrupt driven to a callback function.
 
 Usage in Matlab:
-opti=OptiTrack
-*no Initialization needed, connects unicast at instantiation*
-opti.RigidBody      # With motion capture system running and a Rigid Body, should see feedback
+- opti=OptiTrack
+- *no Initialization needed, connects unicast at instantiation*
+- opti.RigidBody      # With motion capture system running and a Rigid Body, should see feedback
 
 MQTT publishing:
-**opti.publish(sample rate = 50 Hz, # samples = infinite, MQTT broker = '127.0.0.1')**
+- **opti.publish(sample rate = 50 Hz, # samples = infinite, MQTT broker = '127.0.0.1')**
 
 MQTT subscribing:
-**opti.subscribe(topic='test', MQTT broker = '127.0.0.1')**
-When a subscribed topic has an incoming message, the OptiTrack.m outsources the handling to the singular function in callback.py
+- **opti.subscribe(topic='test', MQTT broker = '127.0.0.1')**
+    - When a subscribed topic has an incoming message, the OptiTrack.m outsources the handling to the singular function in callback.py
 
 **opti.stop()** will stop the MQTT services by resetting the MQTT object.
-Once either publsh() or subscribe() are issued, the IP of the MQTT broker cannot be changed except through stop().
-The MQTT object can only make 1 connection. 
-It is possible to instantiate multiple MQTT objects, with separate broker IPs and/or callbacks, but that functionality is not presently built into this implementation.
 
-The MQTT broker 
+Once either publsh() or subscribe() are issued, the IP of the MQTT broker cannot be changed except through stop().
+- The MQTT object can only make 1 connection. 
+- It is possible to instantiate multiple MQTT objects, with separate broker IPs and/or callbacks, but that functionality is not presently built into this implementation.
+
 
 # Optitrack
 Development of OptiTrack lab
