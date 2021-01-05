@@ -32,7 +32,7 @@ MQTT subscribing:
 
 **opti.stop()** will stop the MQTT services by resetting the MQTT object.
 
-Once either publsh() or subscribe() are issued, the IP of the MQTT broker cannot be changed except through stop().
+Once either publsh() or subscribe() are issued, the IP of the MQTT broker cannot be changed except after running stop().
 - The MQTT object can only make 1 connection. 
 - It is possible to instantiate multiple MQTT objects, with separate broker IPs and/or callbacks, but that functionality is not presently built into this implementation.
 
