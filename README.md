@@ -6,12 +6,12 @@ Requires Python 3
 https://www.python.org/downloads/
 
 1. Add paho-mqtt Python library
-    https://pypi.org/project/paho-mqtt/
-    Windows commandline:
-    pip install paho-mqtt
+    - https://pypi.org/project/paho-mqtt/
+    - Windows commandline:
+    - pip install paho-mqtt
 
 2. Replace 'OptiTrack.m' in Professor Kutzer's Matlab toolbox (file location varies by install and machine)
-    Make sure it's the active install directory.
+    - Make sure it's the active install directory.
 
 3. Add 'callback.py' to the same folder as 'OptiTrack.m'
     - This file shall be editable by [student,faculty,whoever] and will ideally be customized for application.
