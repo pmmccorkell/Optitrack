@@ -17,6 +17,9 @@ https://www.python.org/downloads/
     - This file shall be editable by [student,faculty,whoever] and will ideally be customized for application.
     - Presently just prints out the result of subscription.
     - As the filename implies, MQTT subscriptions are interrupt driven to a callback function.
+    - If editing this file, be mindful of Matlab rules for reloading python modules.
+
+4. Run Matlab as admin.
 
 Usage in Matlab:
 - opti=OptiTrack
@@ -35,7 +38,6 @@ MQTT subscribing:
 Once either publish() or subscribe() are issued, the IP of the MQTT broker cannot be changed except after running stop().
 - The MQTT object can only make 1 connection. 
 - It is possible to instantiate multiple MQTT objects, with separate broker IPs and/or callbacks, but that functionality is not presently built into this implementation.
-- Also be mindful of 
 
 # Optitrack
 Development of OptiTrack lab
