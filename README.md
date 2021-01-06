@@ -25,7 +25,7 @@ https://www.python.org/downloads/
 
 Usage in Matlab:
 - **opti=OptiTrack**
-- *no Initialization needed, connects unicast at instantiation*
+- *no Initialization needed, connects unicast at instantiation to opti.defaultserver*
 - **opti.RigidBody**
     - With motion capture system running and a Rigid Body, should see feedback
 
