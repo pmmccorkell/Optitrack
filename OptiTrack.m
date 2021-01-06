@@ -289,8 +289,11 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             end
             
             sleeptime=1/varargin{1};
+            nsamples=0;
             if (nargin>2)
                 nsamples=varargin{2};
+            end
+            if (nsamples)
                 for i=0:1:nsamples
                     obj.mqtt.publish('RigidBody',jsonencode(obj.RigidBody));
                     pause(sleeptime);
@@ -318,7 +321,8 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             if (~obj.mqtt_connected)
                 obj.mqtt_server=server;
                 obj.mqtt.connect(obj.mqtt_server);
-                obj.mqtt.on_message=obj.MESSAGE_CALLBACK;
+                %obj.mqtt.on_message=obj.MESSAGE_CALLBACK;
+                obj.mqtt.on_message=INTERNAL_CALLBACK;
                 obj.mqtt_connected=1;
             end
             obj.mqtt.subscribe(topic);
