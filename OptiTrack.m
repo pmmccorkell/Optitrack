@@ -94,6 +94,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
         mqtt_server         % MQTT server
         mqtt_connected      % MQTT connection status
         MESSAGE_CALLBACK    % MQTT callback function
+        defaultserver       % The default settings for Motive and MQTT server connections
     end % end properties
     
     properties(GetAccess='public', SetAccess='public')
@@ -112,8 +113,10 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             mqttClass = py.importlib.import_module('paho.mqtt.client');
             obj.mqtt = mqttClass.Client(obj.localIP);
             obj.mqtt_connected=0;
+            obj.mqtt_server=0;
             Pythoncallback=py.importlib.import_module('callback');
             obj.MESSAGE_CALLBACK=Pythoncallback.MESSAGE_CALLBACK;
+            obj.defaultserver='10.60.69.244'
         end
         
         function delete(obj)
@@ -158,7 +161,8 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
                 hostIP = varargin{1};
             else
                 % hostIP = '127.0.0.1';		% Local loop-back
-				hostIP = '10.60.69.244';	% OptiTrack server in Hopper208, Jan 4 2021
+				% hostIP = '10.60.69.244';	% OptiTrack server in Hopper208, Jan 4 2021
+                hostIP = obj.defaultserver;
             end
 			if nargin >= 3
 				clientIP = varargin{2};
@@ -266,7 +270,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
                 end
             end
         end
-		
+
         % publish(frequency=50Hz, n samples=infinity, server=127.0.0.1)
         % Publishes the entire RigidBody data as a JSON message.
         % arg1: Sample rate in Hz
@@ -278,16 +282,9 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             if (nargin>3)
                 server=varargin{3};
             else
-                server='127.0.0.1';
+                server=obj.defaultserver;
             end
-            
-            % Only reconnect and update server if not already connected
-            if (~obj.mqtt_connected)
-                obj.mqtt_server=server;
-                obj.mqtt.connect(obj.mqtt_server);
-                obj.mqtt_connected=1;
-            end
-            
+            obj.serverConnect(server);
             sleeptime=1/varargin{1};
             nsamples=0;
             if (nargin>2)
@@ -306,7 +303,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             end
         end
         
-        % subscribe(topic='test',server='127.0.0.1')
+        % subscribe(topic='test',server=obj.defaultserver)
         function subscribe(obj,varargin)
             if nargin>1
                 topic = varargin{1};
@@ -316,15 +313,10 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             if nargin>2
                 server=varargin{2};
             else
-                server='127.0.0.1';
+                server=obj.defaultserver;
             end
-            if (~obj.mqtt_connected)
-                obj.mqtt_server=server;
-                obj.mqtt.connect(obj.mqtt_server);
-                %obj.mqtt.on_message=obj.MESSAGE_CALLBACK;
-                obj.mqtt.on_message=INTERNAL_CALLBACK;
-                obj.mqtt_connected=1;
-            end
+            obj.mqtt.on_message=obj.MESSAGE_CALLBACK;
+            obj.serverConnect(server);
             obj.mqtt.subscribe(topic);
             obj.mqtt.loop_start();
             fprintf("subscribed to "+topic+" on "+server+".\r\n");
@@ -336,11 +328,24 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
     % Getters/Setters
     % --------------------------------------------------------------------
     methods
-        function stop(obj)
+        function stopMQTT(obj)
             obj.mqtt.reinitialise(obj.localIP);
             obj.mqtt_connected=0;
+            obj.mqtt_server=0;
+            obj.mqtt.on_message=0;
         end
-
+        function serverConnect(obj,varargin)
+            % Only update server if one isn't already loaded.
+            server=varargin{1};
+            if (~obj.mqtt_server)
+                 obj.mqtt_server=server;
+            end
+            % Only (re)connect if not already connected.
+            if (~obj.mqtt_connected)
+                obj.mqtt.connect(obj.mqtt_server);
+                obj.mqtt_connected=1;
+            end
+        end
         function getIP(obj)
             [~,IP] = system('ipconfig | findstr "IPv4 Address" | findstr ": 10."');
             obj.localIP=IP((strfind(IP,': 10.')+2):(length(IP)-1));
