@@ -109,6 +109,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             % Create OptiTrack object.
             obj.Status = 'Disconnected';
 			obj.getIP();
+            obj.defaultserver='10.60.69.244'
             obj.Initialize();
             mqttClass = py.importlib.import_module('paho.mqtt.client');
             obj.mqtt = mqttClass.Client(obj.localIP);
@@ -116,7 +117,6 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             obj.mqtt_server=0;
             Pythoncallback=py.importlib.import_module('callback');
             obj.MESSAGE_CALLBACK=Pythoncallback.MESSAGE_CALLBACK;
-            obj.defaultserver='10.60.69.244'
         end
         
         function delete(obj)
