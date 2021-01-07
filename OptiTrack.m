@@ -85,6 +85,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
     % --------------------------------------------------------------------
     properties(GetAccess='public', SetAccess='private')
         Client              % OptiTrack client created using NatNet
+        modeNAT             % 0 (multicast) or 1 (unicast)
         Frame               % Current OptiTrack frame
         FrameRate           % Current OptiTrack frame rate
         RigidBody           % Rigid body information
@@ -105,12 +106,31 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
     % Constructor/Destructor
     % --------------------------------------------------------------------
     methods(Access='public')
-        function obj = OptiTrack
+        function obj = OptiTrack(varargin)
             % Create OptiTrack object.
             obj.Status = 'Disconnected';
 			obj.getIP();
             obj.defaultserver='10.60.69.244';
-            obj.Initialize();
+            autostart=0;
+            if nargin >= 1
+                switch lower(varargin{1})
+                    case 'multicast'
+                        obj.modeNAT = 0;
+                    case 'unicast'
+                        obj.modeNAT = 1;
+                    case 'auto'
+                        autostart=1;
+                        obj.modeNAT = 1;
+                    otherwise
+                       error('OptiTrack:Init:BadConnectionType',...
+                            'Connection property "%s" not recognized.',varargin{1});
+                end
+            else
+                obj.modeNAT = 1;
+            end
+            if (autostart)
+                obj.Initialize();
+            end
             mqttClass = py.importlib.import_module('paho.mqtt.client');
             obj.mqtt = mqttClass.Client(obj.localIP);
             obj.mqtt_connected=0;
@@ -189,8 +209,8 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             % connection type {'Multicast', 'Unicast'}.
             
             % Check inputs
-            %narginchk(1,3);
-            cType = 1;  % Default connection type to unicast
+            % narginchk(1,3);
+            cType = obj.modeNAT;  % Default connection type to unicast
             if nargin >= 2
                 % Designated host IP
                 hostIP = varargin{1};
