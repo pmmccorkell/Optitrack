@@ -109,13 +109,48 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             % Create OptiTrack object.
             obj.Status = 'Disconnected';
 			obj.getIP();
-            obj.defaultserver='10.60.69.244'
+            obj.defaultserver='10.60.69.244';
             obj.Initialize();
             mqttClass = py.importlib.import_module('paho.mqtt.client');
             obj.mqtt = mqttClass.Client(obj.localIP);
             obj.mqtt_connected=0;
             obj.mqtt_server=0;
+            obj.importPython();
+        end
+        
+        function importPython(obj)
+            % Get directory of the OptiTrack toolbox.
+            [installPath, ~] = fileparts(which('OptiTrack'));
+            
+            % Create placeholder of system path for Python in Matlab
+            % Changes to this placeholder are dynamically and automatically
+            % applied to the original py.sys.path
+            pathlist = py.sys.path;
+
+            % See if the OptiTrack toolbox directory is already in the
+            % Python default path list. Add the directory if it is not.
+            pathexists=0;
+            try
+                % .index method returns an integer if the string is found.
+                % If not found, in MatLab it throws a Python Exception.
+                % Behavior is not different outside Matlab.
+                pathexists=pathlist.index(installPath);
+            catch ME
+                %fprintf(ME.identifier+"\r\n")
+                % If the exception is Python, assume it's because the
+                % directory string was not found in the list.
+                % And add it to the list.
+                if (ME.identifier == 'MATLAB:Python:PyException')
+                    pathlist.append(installPath);
+                    fprintf("Added OptiTrack directory to py.sys.path\r\n")
+                end
+            end
+            %py.print(pathexists)
+            % Now that we know the Optitrack toolbox directory is in the
+            % Python default path list, we can import callback.py
             Pythoncallback=py.importlib.import_module('callback');
+            
+            % Assign MQTT subscription interrupt to callback.py
             obj.MESSAGE_CALLBACK=Pythoncallback.MESSAGE_CALLBACK;
         end
         
