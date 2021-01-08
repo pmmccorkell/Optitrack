@@ -333,7 +333,11 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             if (nargin>3)
                 server=varargin{3};
             else
-                server=obj.defaultserver;
+                if (obj.mqtt_server)
+                    server=obj.mqtt_server;
+                else
+                    server=obj.defaultserver;
+                end
             end
             obj.serverConnect(server);
             sleeptime=1/varargin{1};
@@ -364,7 +368,11 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             if nargin>2
                 server=varargin{2};
             else
-                server=obj.defaultserver;
+                if (obj.mqtt_server)
+                    server=obj.mqtt_server;
+                else
+                    server=obj.defaultserver;
+                end
             end
             obj.mqtt.on_message=obj.MESSAGE_CALLBACK;
             obj.serverConnect(server);
