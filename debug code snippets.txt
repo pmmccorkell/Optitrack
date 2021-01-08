@@ -1,0 +1,27 @@
+
+Initialize(clientIP,hostIP,unicast/multicast)
+
+%             if (nargin>1)
+%                 clientIP=varargin{1}
+%             else
+%                 clientIP='127.0.0.1'
+%             end
+%             if (nargin>2)
+%                 hostIP=varargin{2}
+%             end
+%             mode = 9000
+%             if (nargin>3)
+%                 mode=varargin{3}
+%             else
+%                 mode='unicast'
+%             end
+%             switch (mode)
+%                 case 'unicast'
+%                     cType = 1
+%                 case 'multicast'
+%                     cType = 0
+%                 otherwise
+%                     cType = 1
+%             end
+
+

@@ -192,7 +192,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
     % Initialization
     % --------------------------------------------------------------------
     methods(Access='public')
-    
+        % Initialize(hostIP,cType)
         function Initialize(obj,varargin)
             % Initialize initializes an OptiTrack client assuming the
             % NatNet server is set to local loop-back (127.0.0.1) and there
@@ -210,8 +210,9 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             
             % Check inputs
             % narginchk(1,3);
-            cType = obj.modeNAT;  % Default connection type to unicast
-            if nargin >= 2
+            cType = obj.modeNAT;  % Set default cType to the object property
+            clientIP=obj.localIP;
+            if nargin > 1
                 % Designated host IP
                 hostIP = varargin{1};
             else
@@ -219,14 +220,9 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
 				% hostIP = '10.60.69.244';	% OptiTrack server in Hopper208, Jan 4 2021
                 hostIP = obj.defaultserver;
             end
-			if nargin >= 3
-				clientIP = varargin{2};
-			else
-				clientIP=obj.localIP;
-			end
-            if nargin >= 4
+            if nargin > 2
                 % Define connection type
-                switch lower(varargin{3})
+                switch lower(varargin{2})
                     case 'multicast'
                         cType = 0;
                     case 'unicast'
@@ -236,7 +232,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
                             'Connection property "%s" not recognized.',varargin{2});
                 end
             end
-            
+           
             % Check IP
             % TODO - check for valid IP address
             if ~ischar(hostIP)
@@ -278,8 +274,8 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             NET.addAssembly(dllPath);
             
             % Initialize NatNet client
-            client = NatNetML.NatNetClientML(cType);
-            
+            client = NatNetML.NatNetClientML(cType)
+
             % Set the IP
             errFlag = client.Initialize(clientIP,hostIP);
             if errFlag
@@ -402,7 +398,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             end
         end
         function getIP(obj)
-            [~,IP] = system('ipconfig | findstr "IPv4 Address" | findstr ": 10."');
+            [~,IP] = system('ipconfig | findstr "IPv4 Address" | findstr "10."');
             obj.localIP=IP((strfind(IP,': 10.')+2):(length(IP)-1));
         end
         function client = get.Client(obj)
