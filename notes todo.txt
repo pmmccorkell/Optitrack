@@ -1,0 +1,39 @@
+getAllIPv4 = java.net.Inet4Address.getAllByName(java.net.Inet4Address.getLocalHost.getCanonicalHostName)
+n = numel(getAllIPv4)
+found10dotnet=0
+for i=1:n
+	str = getAllIPv4(i).toString
+	found10dotnet = str.
+end
+
+
+
+tood:
+Create MQTT pub and sub classes
+Subscription run independent of other toolboxes
+	portable to OptiTrack, Qualisys, or general usage
+	
+Publisher run OptiTrack as a subclass (?), parse data into set topics and modes
+	w/o a specified mode, could just run generically ?
+	dev further for Qualisys
+
+
+MQTT publish modes:
+
+
+topic_prefix = "OptiTrack/RigidBody.Name/"
+
+RigidBody			- everything
+PosQua				- FrameIndex, Position, Quaternion
+PosRot				- FrameIndex, Position, Rotation
+Mark				- FrameIndex, MarkerPosition, MarkerSize
+PosQuaMark			- FrameIndex, Position, Quaternion, MarkerPosition, MarkerSize
+PosRotMark			- FrameIndex, Position, Rotation, MarkerPosition, MarkerSize
+
+Unused ?
+TimeStamp
+FrameLatency
+isTracked
+HgTransform
+
+
