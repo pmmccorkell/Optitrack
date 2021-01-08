@@ -78,4 +78,6 @@ Done:
     - Each user will have to request this (?)
 - Installed associated software on OptiTrack server
 - OptiTrack server runs Matlab and MQTT broker
+- Faculty testing of Matlab unicast and multicast
+
 
