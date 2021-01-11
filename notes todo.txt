@@ -21,19 +21,46 @@ Publisher run OptiTrack as a subclass (?), parse data into set topics and modes
 MQTT publish modes:
 
 
-topic_prefix = "OptiTrack/RigidBody.Name/"
+topic_prefix = "OptiTrack/RigidBody.Name"
 
-RigidBody			- everything
-PosQua				- FrameIndex, Position, Quaternion
-PosRot				- FrameIndex, Position, Rotation
-Mark				- FrameIndex, MarkerPosition, MarkerSize
-PosQuaMark			- FrameIndex, Position, Quaternion, MarkerPosition, MarkerSize
-PosRotMark			- FrameIndex, Position, Rotation, MarkerPosition, MarkerSize
+/RigidBody			- everything
+/PosQua				- FrameIndex, Position, Quaternion
+/PosRot				- FrameIndex, Position, Rotation
+/Mark				- FrameIndex, MarkerPosition, MarkerSize
+/PosQuaMark			- FrameIndex, Position, Quaternion, MarkerPosition, MarkerSize
+/PosRotMark			- FrameIndex, Position, Rotation, MarkerPosition, MarkerSize
+/Dynamic			- As requested by the subscriber(s)
 
 Unused ?
 TimeStamp
 FrameLatency
 isTracked
 HgTransform
+
+
+Control topics ?
+Frequency of control exchanges ? 1 Hz ?
+topic_prefix = "OptiTrack/Control"
+
+subscriber -> publisher:
+Topic		What it does														Contents
+/AddObject	Adds RigidBody.xyz object from the publisher's active topics		the EXACT name of a RigidBody object, ie "Position", "Quaternion", etc.
+/RemObject	Removes RigidBody.xyz object from the publisher's active topics		the EXACT name of a RigidBody object, ie "Position", "Quaternion", etc.
+
+publisher -> subscriber:
+Topic		What it does														Contents
+/Working	0 - LastFrame isn't changing, 1 - LastFrame is changing				Boolean or 0/1
+	*maybe a better name?
+/List		A list of the current Objects being broadcast						JSON of Object Names that are currently included in the "/Dynamic" topic
+
+Downside:
+1 misbehaving client (or confused student) can screw it up for everyone
+
+
+
+
+
+
+
 
 
