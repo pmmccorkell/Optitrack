@@ -52,6 +52,7 @@ Topic		What it does														Contents
 /Working	0 - LastFrame isn't changing, 1 - LastFrame is changing				Boolean or 0/1
 	*maybe a better name?
 /List		A list of the current Objects being broadcast						JSON of Object Names that are currently included in the "/Dynamic" topic
+/Names		A list of RigidBody names available
 
 Downside:
 1 misbehaving client (or confused student) can screw it up for everyone
