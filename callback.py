@@ -8,4 +8,3 @@ def MESSAGE_CALLBACK(client,userdata,message):
 	print(message.retain)
 	print(client)
 
-
