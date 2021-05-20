@@ -1,0 +1,60 @@
+publishRigidBody
+	publishes entire Kutzer Toolbox RigidBody for each rigid body
+	topic: OptiTrack/ [RigidBody.Name] /RigidBody
+
+publishPosQua
+	publishes FrameIndex, Position, Quaternion for each rigid body
+	topic: OptiTrack/ [RigidBody.Name] /PosQua
+
+publishNames
+	publishes a list of Names for all rigid bodies
+	topic: OptiTrack/Control/Names
+
+pubDynamic
+	publishes matches from Python Set dynamicList
+	Add RigidBody objects to the Python Set using topic 'OptiTrack/Control/AddObject'
+	Remove RigidBody objects from the Python Set using topic 'OptiTrack/Control/RemObject'
+	topic: OptiTrack/ [RigidBody.Name] /Dynamic
+
+
+Bandwidth testing
+RigidBody Names	~2.4 kbps
+PosQua		~15.3 kbps
+PosRot		~21.5 kbps
+Mark		~20.9 kbps
+PosQuaMark	~33.1 kbps
+PosRotMark	~40.7 kbps
+(just FrameIndex using Dynamic)		~3.4 kbps
+
+
+Testing for [frequency] Hz over 10seconds (or until it completes 10,000 ... it never gets close to doing so within 10s)
+With subscriber connected over loopback.
+
+		@1000 Hz	@300	@200 		@100 
+full RigidBody	44 Hz			37 Hz		31 Hz
+Index,Pos,Qua	190 Hz		129 Hz	106 Hz		69 Hz
+
+
+% javaTimerTest(frequency, duration)
+function javaTimerTest(varargin)
+    publisher=mqttML('auto');
+    freq=100; % Hz
+    if nargin>0
+        freq=varargin{1}; % Hz
+    end
+    period = 1000/freq % ms
+    
+    duration = 10 * 1000; % ms
+    if nargin>1
+        duration = varargin{2}*1000;
+    end
+    samples=duration/period
+    
+    tic;
+    for i=1:samples
+        java.lang.Thread.sleep(period);
+        publisher.publishPosQua;
+    end
+    time=toc
+    effectiveFreq=samples/time
+end

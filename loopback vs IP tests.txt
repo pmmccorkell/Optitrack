@@ -1,0 +1,22 @@
+Motive:
+	broadcast on 10.x.x.x
+	multicast
+
+Matlab:				outside OptiTrackTB		within Toolbox
+	loopback, loopback	connects			No RigidBody
+	explicitIP, loopback	connects			No RigidBody
+	explicitIP,explicitIP	connects			works
+	explicitIP, loopback	connects			No RigidBody
+
+
+Motive:
+	broadcast on 10.x.x.x
+	unicast
+
+Matlab:				outside OptiTrackTB		within Toolbox
+	loopback, loopback	connects			No RigidBody
+	explicitIP, loopback	error 3				fails to init
+	explicitIP,explicitIP	connects			works
+	explicitIP, loopback	connects			fails to init
+
+
