@@ -353,7 +353,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
     methods
         function getIP(obj)
             % for TSD network:
-            [~,IP] = system('ipconfig | findstr "IPv4 Address" | findstr "192.168.1"');
+            [~,IP] = system('ipconfig | findstr "IPv4 Address" | findstr "192.168."');
             obj.localIP=IP((strfind(IP,': 192.')+2):(length(IP)-1));
             
             if(isempty(obj.localIP))
