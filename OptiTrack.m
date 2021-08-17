@@ -83,7 +83,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
     % --------------------------------------------------------------------
     % General properties
     % --------------------------------------------------------------------
-    properties(GetAccess='public', SetAccess='private')
+    properties(GetAccess='public', SetAccess='public', SetObservable)
         Client              % OptiTrack client created using NatNet
         modeNAT             % 0 (multicast) or 1 (unicast)
         Frame               % Current OptiTrack frame
@@ -110,7 +110,8 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             % Create OptiTrack object.
             obj.Status = 'Disconnected';
 			obj.getIP();
-            obj.defaultserver='10.60.69.244';
+            % obj.defaultserver='10.60.69.244';
+            obj.defaultserver='192.168.1.4';
             autostart=0;
             if nargin >= 1
                 switch lower(varargin{1})
@@ -274,7 +275,7 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             NET.addAssembly(dllPath);
             
             % Initialize NatNet client
-            client = NatNetML.NatNetClientML(cType)
+            client = NatNetML.NatNetClientML(cType);
 
             % Set the IP
             errFlag = client.Initialize(clientIP,hostIP);
@@ -406,8 +407,13 @@ classdef OptiTrack < matlab.mixin.SetGet % Handle
             end
         end
         function getIP(obj)
-            [~,IP] = system('ipconfig | findstr "IPv4 Address" | findstr "10."');
-            obj.localIP=IP((strfind(IP,': 10.')+2):(length(IP)-1));
+            % for TSD network:
+            [~,IP] = system('ipconfig | findstr "IPv4 Address" | findstr "192.168.1"');
+            obj.localIP=IP((strfind(IP,': 192.')+2):(length(IP)-1));
+            
+            % for mission network:
+          %  [~,IP] = system('ipconfig | findstr "IPv4 Address" | findstr "10."');
+          %  obj.localIP=IP((strfind(IP,': 10.')+2):(length(IP)-1));
         end
         function client = get.Client(obj)
             % Get client from OptiTrack object
